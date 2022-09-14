@@ -1,0 +1,94 @@
+#
+# Metos3D: A Marine Ecosystem Toolkit for Optimization and Simulation in 3-D
+# Copyright (C) 2014  Jaroslaw Piwonski, CAU, jpi@informatik.uni-kiel.de
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+# debug
+-Metos3DDebugLevel                                  %Metos3dDebugLevel%
+
+# geometry
+-Metos3DGeometryType                                %Metos3DGeometryType%
+-Metos3DProfileInputDirectory                       %Metos3DProfileInputDirectory%
+-Metos3DProfileMaskFile                             %Metos3DProfileMaskFile%
+-Metos3DProfileVolumeFile                           %Metos3DProfileVolumeFile%
+
+# bgc tracer
+-Metos3DTracerCount                                 %Metos3DTracerCount%
+-Metos3DTracerName                                  %Metos3DTracerName%
+-Metos3DTracerInitValue                             %Metos3DTracerInitValue%
+-Metos3DTracerOutputDirectory                       %Metos3DTracerOutputDirectory%
+-Metos3DTracerOutputFile                            %Metos3DTracerOutputFile%
+# weight with volumes and sum up
+-Metos3DTracerMonitor
+
+# diagnostic variables
+-Metos3DDiagnosticCount                             %Metos3DDiagnosticCount%
+# weight with volumes and sum up
+#-Metos3DDiagnosticMonitor
+
+# bgc parameter
+-Metos3DParameterCount                              %Metos3DParameterCount%
+-Metos3DParameterValue                              %Metos3DParameterValue%
+
+# bgc boudary conditions
+-Metos3DBoundaryConditionCount                      %Metos3DBoundaryConditionCount%
+-Metos3DBoundaryConditionInputDirectory             %Metos3DBoundaryConditionInputDirectory%
+-Metos3DBoundaryConditionName                       %Metos3DBoundaryConditionName%
+# latitude
+# ice cover
+-Metos3DLatitudeCount                               %Metos3DLatitudeCount%
+-Metos3DLatitudeFileFormat                          %Metos3DLatitudeFileFormat%
+-Metos3DIceCoverCount                               %Metos3DIceCoverCount%
+-Metos3DIceCoverFileFormat                          %Metos3DIceCoverFileFormat%
+
+# bgc domain conditions
+-Metos3DDomainConditionCount                        %Metos3DDomainConditionCount%
+-Metos3DDomainConditionInputDirectory               %Metos3DDomainConditionInputDirectory%
+-Metos3DDomainConditionName                         %Metos3DDomainConditionName%
+# layer depth
+-Metos3DLayerDepthCount                             %Metos3DLayerDepthCount%
+-Metos3DLayerDepthFileFormat                        %Metos3DLayerDepthFileFormat%
+# layer height
+-Metos3DLayerHeightCount                            %Metos3DLayerHeightCount%
+-Metos3DLayerHeightFileFormat                       %Metos3DLayerHeightFileFormat%
+
+# transport
+-Metos3DTransportType                               %Metos3DTransportType%
+-Metos3DMatrixInputDirectory                        %Metos3DMatrixInputDirectory%
+-Metos3DMatrixCount                                 %Metos3DMatrixCount%
+-Metos3DMatrixExplicitFileFormat                    %Metos3DMatrixExplicitFileFormat%
+-Metos3DMatrixImplicitFileFormat                    %Metos3DMatrixImplicitFileFormat%
+
+# time stepping
+-Metos3DTimeStepStart                               %Metos3DTimeStepStart%
+-Metos3DTimeStepCount                               %Metos3DTimeStepCount%
+-Metos3DTimeStep                                    %Metos3DTimeStep%
+
+# solver
+-Metos3DSolverType                                  %Metos3DSolverType%
+-Metos3DSpinupCount                                 %Metos3DSpinupCount%
+-Metos3DSpinupMonitor
+
+## solver (PETSc)
+#-Metos3DSolverType                                  Newton
+#-Metos3DNewton_snes_type                            ls
+#-Metos3DNewton_snes_view
+#-Metos3DNewton_snes_ksp_ew
+#-Metos3DNewton_snes_monitor
+#-Metos3DNewton_snes_linesearch_monitor
+#-Metos3DNewton_ksp_type                             gmres
+#-Metos3DNewton_ksp_monitor
+#-Metos3DNewton_ksp_view

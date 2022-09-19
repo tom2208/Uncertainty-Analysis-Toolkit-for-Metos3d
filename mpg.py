@@ -120,15 +120,14 @@ indicator_replacements = {
 # option_file_content:   the content of the option file
 # variable_replacements: a list of values to replace the variables with, beginning with the first value being associated
 #                        with the first distribution "D0" and so on.
-# index:                 the index of the option file, (if you generate N option files this index will be in range
-#                        of 0 to N-1)
+# index:                 a index list for values of the variable_replacements
 def write_option_file(filepath, option_file_content, variable_replacements, index):
     try:
         with open(filepath, "w") as file_stream:
 
             for i in range(len(variable_replacements)):
                 option_file_content = option_file_content.replace(variable.replace("i", str(i)),
-                                                                  str(variable_replacements[i][index]))
+                                                                  str(variable_replacements[i][index[i]]))
 
             file_stream.write(option_file_content)
             file_stream.close()
@@ -278,7 +277,7 @@ def generate_mpirun(yaml_data, names):
 
     arguments = ""
     for name in names:
-        arguments += "mpirun " + options + " " + program_path + " " + optionfiles_path + name + "\n"
+        arguments += "mpirun " + options + " " + program_path + " " + optionfiles_path + str(name) + "\n"
 
     return arguments[0:len(arguments) - 1]
 
@@ -290,7 +289,6 @@ def generate_option_files():
     number_of_distributions = yaml_data["distributions"]["number"]
     file_name = yaml_data["file_name"]
     output_directory = yaml_data["output_directory"]
-    sample_size = yaml_data["distributions"]["sample_size"]
 
     value_array = [0 for i in range(number_of_distributions)]
 
@@ -311,11 +309,33 @@ def generate_option_files():
     option_file_path = yaml_data["option_file_path"]
     content = read_option_file(option_file_path)
 
+    sample_size = len(value_array[0])
+    if number_of_distributions >= 2:
+        sample_size *= len(value_array[1])
+    elif number_of_distributions >= 3:
+        sample_size *= len(value_array[2])
+
     option_file_names = [0 for i in range(sample_size)]
-    for i in range(sample_size):
-        option_file_name = file_name + str(i) + ".txt"
-        option_file_names[i] = option_file_name
-        write_option_file(output_directory + option_file_name, replace_indicators(content, i), value_array, i)
+
+    k = 0
+    while k == 0 or (number_of_distributions >= 3 and k < len(value_array[2])):
+        j = 0
+        while j == 0 or (number_of_distributions >= 2 and j < len(value_array[1])):
+            for i in range(len(value_array[0])):
+                option_file_name = file_name + str(i) + "-" + str(j) + "-" + str(k) + ".txt"
+                len1 = 0
+                len2 = 0
+                if number_of_distributions >= 2:
+                    len1 = len(value_array[1])
+                if number_of_distributions >= 3:
+                    len2 = len(value_array[2])
+
+                index = (k * len2)+(j * len1)+i
+                option_file_names[index] = option_file_name
+                write_option_file(output_directory + option_file_name, replace_indicators(content, i), value_array,
+                                  [i, j, k])
+            j += 1
+        k += 1
 
     # generate command arguments
     if yaml_data["mpirun"]["generate"]:
@@ -334,15 +354,12 @@ def generate_option_files():
 # yaml_data:          the yaml data to use to generate the random values
 # returns:            the array with the generated values
 def generate_random_parameter(distribution_index, yaml_data):
-    print_double_seperator()
-    print(notice)
-    print_double_seperator()
     print_info("Generating random parameter values for distribution D" + str(distribution_index) + "...")
 
     distribution_type = yaml_data["distributions"]["D" + str(distribution_index)]["type"]
     lower_bound = yaml_data["distributions"]["D" + str(distribution_index)]["lower_bound"]
     upper_bound = yaml_data["distributions"]["D" + str(distribution_index)]["upper_bound"]
-    sample_size = yaml_data["distributions"]["sample_size"]
+    sample_size = yaml_data["distributions"]["D" + str(distribution_index)]["sample_size"]
     tries = yaml_data["distributions"]["D" + str(distribution_index)]["tries"]
     value_on_fail = yaml_data["distributions"]["D" + str(distribution_index)]["value_on_fail"]
 
@@ -387,7 +404,7 @@ def generate_random_parameter(distribution_index, yaml_data):
                 exit(1)
 
     if print_array:
-        print_info("Generated values for distribution D" + str(distribution_index) + str(parameter_array))
+        print_info("Generated values for distribution D" + str(distribution_index) + ": " + str(parameter_array))
 
     if not (number_of_failed_generations == 0):
         print_warning("Values for distribution D" + str(distribution_index) + " generated. Failed to generate " +
@@ -475,4 +492,7 @@ if __name__ == '__main__':
     if show_l:
         print_license()
 
+    print_double_seperator()
+    print(notice)
+    print_double_seperator()
     generate_option_files()

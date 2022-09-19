@@ -2,9 +2,9 @@
 # Name the distributions in the pattern "DX" with X being 0 for the first distribution
 # counting upwards for following distributions
 distributions:
-  number: 1                # number of distributions (max. 3)
+  number: 2                # number of distributions (max. 3)
   D0:
-    sample_size: 100         # sample size
+    sample_size: 3         # sample size
     type: lognormal        # distribution type
     mu: -3.925             # mu of the distribution
     sigma: 0.01            # sigma of the distribution
@@ -13,7 +13,16 @@ distributions:
     tries: 1               # number of tries to generate one parameter value (generation fails if number is out of bounds)
     value_on_fail: 0.02    # parameter value if generation fails
     save_in_csv: True      # save parameter values in csv file
-
+  D1:
+    sample_size: 3         # sample size
+    type: lognormal        # distribution type
+    mu: 3.38785            # mu of the distribution
+    sigma: 0.1634          # sigma of the distribution
+    lower_bound: 15.0
+    upper_bound: 60.0
+    tries: 1               # number of tries to generate one parameter value (generation fails if number is out of bounds)
+    value_on_fail: 30.0    # parameter value if generation fails
+    save_in_csv: True      # save parameter values in csv file
 # the output directory for the generated data
 output_directory: "option_files/"
 # the path to the template option file
@@ -29,7 +38,7 @@ mpirun:
 
 # use %DX% as the distribution variable with X being the distribution number
 model:
-  Metos3DParameterValue: "%D0%,2.0,0.5,30.0,0.858"
+  Metos3DParameterValue: "%D0%,%D1%,0.5,30.0,0.858"
   Metos3DTimeStepCount: 90
   Metos3DTimeStep: 0.0111111111111111
   Metos3DSpinupCount: 3000
